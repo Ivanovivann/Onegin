@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <assert.h>
+
 
 //=============================================================================
 
@@ -126,13 +128,13 @@ int params_of_file(FILE* input, int* size_input) {
 
 int bubble_sort(int count_strings, char** strings) {
     for (int i = 0; i < count_strings; i++)
+    {
         for (int j = 0; j < count_strings - 1; j++)
         {
-            int condition = compare_strings(strings, j);
-
-            if (condition == -1)
+            if (compare_strings(strings, j) < 0)
                 my_swap (strings, j);
         }
+    }
 
     return 0;
 }
@@ -167,13 +169,7 @@ int compare_strings(char** strings, int j) {
             k2++;
     }
 
-    if ((*(strings[j] + k1)) > (*(strings[j + 1] + k2)))
-        return -1;
-
-    if ((*(strings[j] + k1)) < (*(strings[j + 1] + k2)))
-        return 1;
-
-    return 0;
+    return *(strings[j + 1] + k2) - *(strings[j] + k1);
 }
 
 //-----------------------------------------------------------------------------
@@ -201,8 +197,8 @@ int print_text_in_file (int count_strings, char ** strings) {
         if (*strings[i + counter] != '\n') {
             for (int k = counter; *((strings[i]) + k) != '\n'; k++)
                 putc (*((strings[i]) + k), sorted);
-
-            fprintf (sorted, "\n");
+            
+            putc ('\n', sorted);
         }
     }
 
