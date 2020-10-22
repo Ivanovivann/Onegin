@@ -1,36 +1,89 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
 
 
 //=============================================================================
 
+/*!
+    \brief This function counts strings ahd symbols in input file
+    \param [in] input - pointer on input file
+    \param [in] size_input - address of the variable that will contain the number of rows after the function is executed
+    \return Quantity strings in input file
+*/
+
 int params_of_file(FILE* input, int* size_input);
+
+//-----------------------------------------------------------------------------
+
+/*!
+    \brief This function sorts array
+    \param [in] count_strings - quantity of elements of array strings
+    \param [in] strings - array of pointers on strings
+    \return 0
+*/
 
 int bubble_sort(int count_strings, char** strings);
 
+//-----------------------------------------------------------------------------
+
+/*!
+    \brief This function compares 2 strings
+    \param [in] strings - array of pointers on strings
+    \param [in] j - number of first string
+    \return 0 if lines are the same
+    \return 1 if the first line early in the alphabet
+    \return -1 if the second line early in the alphabet
+*/
+
 int compare_strings(char** strings, int j);
+
+//-----------------------------------------------------------------------------
+
+/*!
+    \brief This function swap pointers
+    \param [in] strings - array of pointers on strings
+    \param [in] j - number of first string
+    \return 0
+*/
 
 int my_swap (char** strings, int j);
 
+//-----------------------------------------------------------------------------
+
+/*!
+    \brief This function print text in file
+    \param [in] count_strings - quantity of elements  of array
+    \param [in] strings - array of pointers on strings
+    \return 0
+*/
+
 int print_text_in_file (int count_strings, char** strings);
 
-int input_mass (FILE* unsorted, char** strings, char* text, int count_symbols);
+//-----------------------------------------------------------------------------
+
+/*!
+    \brief This function print text in file
+    \param [in] input - pointer on input file
+    \param [in] strings - array of pointers on strings
+    \param [in] text - array of symbols from file
+    \param [in] count_symbols - quantity of elements of array text
+    \return 0
+*/
+
+int input_mass (FILE* input, char** strings, char* text, int count_symbols);
 
 //=============================================================================
 
 
 int main() {
-    FILE* unsorted = fopen ("unsorted_onegin.txt", "r");
+    FILE* unsorted = fopen ("unsorted.txt", "r");
 
     int count_symbols = 0;
     int count_strings = params_of_file(unsorted, &count_symbols);
 
     printf ("Size of file is %d\n", count_symbols);
     printf ("Strings in file is %d\n", count_strings);
-
-    rewind (unsorted);
 
     char*  text    = (char*) calloc (count_symbols + 1, sizeof(char));
     char** strings = (char**) calloc (count_strings, sizeof(char*));
@@ -133,14 +186,16 @@ int print_text_in_file (int count_strings, char ** strings) {
 
 //-----------------------------------------------------------------------------
 
-int input_mass (FILE* unsorted, char** strings, char* text, int count_symbols) {
+int input_mass (FILE* input, char** strings, char* text, int count_symbols) {
+    rewind (input);
+
     int j = 1;
 
     strings[0] = &text[0];
 
     for (int i = 0; i < count_symbols; i++)
     {
-        int symbol = getc(unsorted);
+        int symbol = getc(input);
         text[i] = symbol;
 
         if ((symbol == '\n') && (i != count_symbols - 1)) {
