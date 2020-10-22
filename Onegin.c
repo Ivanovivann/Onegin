@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <ctype.h>
 
 //=============================================================================
 
@@ -77,7 +77,7 @@ int input_mass (FILE* input, char** strings, char* text, int count_symbols);
 
 
 int main() {
-    FILE* unsorted = fopen ("unsorted.txt", "r");
+    FILE* unsorted = fopen ("unsorted_onegin.txt", "r");
 
     int count_symbols = 0;
     int count_strings = params_of_file(unsorted, &count_symbols);
@@ -140,15 +140,37 @@ int bubble_sort(int count_strings, char** strings) {
 //-----------------------------------------------------------------------------
 
 int compare_strings(char** strings, int j) {
-    int k = 0;
+    int k1 = 0,
+        k2 = 0;
 
-    while ((*(strings[j] + k)) == (*(strings[j + 1] + k)))
-        k++;
+    while (isalpha(*(strings[j] + k1)) == 0)
+        k1++;
 
-    if ((*(strings[j] + k)) > (*(strings[j + 1] + k)))
+    while (isalpha(*(strings[j + 1] + k2)) == 0)
+        k2++;
+
+    while((*(strings[j] + k1)) == (*(strings[j + 1] + k2)))
+    {
+        k1++;
+        k2++;
+
+        if ((*(strings[j] + k1)) == '\n')
+            return 1;
+
+        if ((*(strings[j + 1] + k2)) == '\n')
+            return -1;
+
+        while (isalpha(*(strings[j] + k1)) == 0)
+            k1++;
+
+        while (isalpha(*(strings[j + 1] + k2)) == 0)
+            k2++;
+    }
+
+    if ((*(strings[j] + k1)) > (*(strings[j + 1] + k2)))
         return -1;
 
-    if ((*(strings[j] + k)) < (*(strings[j + 1] + k)))
+    if ((*(strings[j] + k1)) < (*(strings[j + 1] + k2)))
         return 1;
 
     return 0;
@@ -171,8 +193,13 @@ int print_text_in_file (int count_strings, char ** strings) {
 
     for (int i = 0; i < count_strings; i++)
     {
-        if (*strings[i] != '\n') {
-            for (int k = 0; *((strings[i]) + k) != '\n'; k++)
+        int counter = 0;
+
+        while (*(strings[i] + counter) == ' ')
+            counter++;
+
+        if (*strings[i + counter] != '\n') {
+            for (int k = counter; *((strings[i]) + k) != '\n'; k++)
                 putc (*((strings[i]) + k), sorted);
 
             fprintf (sorted, "\n");
