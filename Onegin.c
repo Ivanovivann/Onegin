@@ -82,8 +82,8 @@ int main() {
     int count_symbols = 0;
     int count_strings = params_of_file(unsorted, &count_symbols);
 
-    printf ("Size of file is %d\n", count_symbols);
-    printf ("Strings in file is %d\n", count_strings);
+    //printf ("Size of file is %d\n", count_symbols);
+    //printf ("Strings in file is %d\n", count_strings);
 
     char*  text    = (char*) calloc (count_symbols + 1, sizeof(char));
     char** strings = (char**) calloc (count_strings, sizeof(char*));
